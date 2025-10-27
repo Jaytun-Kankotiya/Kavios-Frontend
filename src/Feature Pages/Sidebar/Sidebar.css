@@ -159,13 +159,19 @@
 /* Content area adjusts based on sidebar width */
 .content-area {
   flex-grow: 1;
-  margin: 20px;
   transition: margin-left 0.3s ease;
-  margin-left: 90px; 
+  margin-left: 70px;
 }
 
-/* When sidebar is hovered, expand margin */
+/* When sidebar is hovered, shift content and navbar */
 .sidebar:hover ~ .content-area {
   margin-left: 240px;
 }
+
+.sidebar:hover ~ .content-area .navbar-top {
+  margin-left: 240px;
+}
+
+
+
 

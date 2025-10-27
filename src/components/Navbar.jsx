@@ -1,9 +1,10 @@
 import { Plus, User, Home, Image } from "lucide-react";
 import '../index.css'
+import '../Feature Pages/Sidebar/Sidebar.css'
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg bg-light px-2">
+    <nav className="navbar navbar-expand-lg px-2 py-2 navbar-top">
       <div className="container-fluid">
 
         {/* Left: Search Bar */}
@@ -55,7 +56,6 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-
       </div>
     </nav>
   );
