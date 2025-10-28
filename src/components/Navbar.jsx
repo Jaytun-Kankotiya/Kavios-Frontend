@@ -7,7 +7,6 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg px-2 py-2 navbar-top">
       <div className="container-fluid">
 
-        {/* Left: Search Bar */}
         <form className="d-flex me-auto" role="search" style={{ width: "450px" }}>
           <input
             className="form-control me-2"
@@ -20,7 +19,6 @@ const Navbar = () => {
           </button>
         </form>
 
-        {/* Right: Nav Items */}
         <button
           className="navbar-toggler"
           type="button"

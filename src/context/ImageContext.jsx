@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 
 
@@ -8,7 +8,18 @@ export const useImageContext = () => useContext(ImageContext)
 
 const ImageProvider = ({children}) => {
 
+    const [images, setImages] = useState([])
+    const [albums, setAlbums] = useState([])
+    const [favoriteImages, setFavoriteImages] = useState([])
+    const [favoriteAlbums, setFavoriteAlbums] = useState([])
+    const [recentlyAdded, setRecentlyAdded] = useState([])
+    const [imageTrash, setImageTrash] = useState([])
+    const [albumTrash, setAlbumTrash] = useState([])
+    const [sharedWithMe, setSharedWithMe] = useState([])
+    const [loading, setLoading] = useState(true)
+
     const backendUrl = import.meta.env.VITE_BACKEND_URL
+
 
 
 

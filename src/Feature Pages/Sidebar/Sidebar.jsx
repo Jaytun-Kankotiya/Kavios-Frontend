@@ -1,6 +1,6 @@
-// src/components/Sidebar.jsx
+
 import { Link, useLocation } from "react-router-dom";
-import { Images, Album, Star, Clock4, Trash2, Camera } from "lucide-react";
+import { Images, Album, Star, Clock4, Trash2, Camera, Users } from "lucide-react";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -10,6 +10,7 @@ const Sidebar = () => {
     { path: "/photos", label: "Photos", icon: <Images size={20} /> },
     { path: "/albums", label: "Albums", icon: <Album size={20} /> },
     { path: "/favorites", label: "Favorites", icon: <Star size={20} /> },
+    { path: "/shared-with-me", label: "Shared with me", icon: <Users size={20} /> },
     {
       path: "/recently_added",
       label: "Recently Added",

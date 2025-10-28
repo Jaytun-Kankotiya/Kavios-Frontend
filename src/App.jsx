@@ -11,6 +11,7 @@ import AlbumDetails from "./Feature Pages/AlbumDetails";
 import Favorite from "./Feature Pages/Favorites";
 import RecentlyAdded from "./Feature Pages/RecentlyAdded";
 import Trash from "./Feature Pages/Trash";
+import SharedAlbums from "./Feature Pages/SharedAlbums";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/auth/callback" element={<GoogleCallback />} />
           <Route path="/photos" element={<Photos />} />
           <Route path="/albums" element={<AlbumDetails />} />
+          <Route path="/shared-with-me" element={<SharedAlbums />} />
           <Route path="/favorites" element={<Favorite />} />
           <Route path="/recently_added" element={<RecentlyAdded />} />
           <Route path="/trash" element={<Trash />} />
