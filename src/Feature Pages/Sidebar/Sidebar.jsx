@@ -24,7 +24,7 @@ const Sidebar = () => {
       <nav className="sidebar" aria-label="Main navigation">
         <div className="sidebar-inner">
           <div className="sidebar-brand">
-            <Link className="sidebar-link" to="/photos">
+            <Link className="navbrand-link" to="/photos">
               <span className="brand-icon">
                 <Camera size={20} />
               </span>

@@ -1,0 +1,76 @@
+.photos-main {
+  padding: 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+
+.photo-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.photo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.photo-img {
+  width: 100%;    
+  height: auto;    
+  object-fit: contain; 
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.3s ease;
+}
+
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.75));
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photo-card:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.photo-tags {
+  font-size: 0.85rem;
+  color: #d3d3d3;
+}
+
+.photo-size {
+  font-size: 0.8rem;
+  color: #ccc;
+  display: block;
+  margin-top: 5px;
+}
+
+.no-photos {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-top: 40px;
+}

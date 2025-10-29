@@ -1,23 +1,21 @@
 import { Plus, User, Home, Image } from "lucide-react";
 import '../index.css'
+import './Navbar.css'
 import '../Feature Pages/Sidebar/Sidebar.css'
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg px-2 py-2 navbar-top">
+    <nav className="navbar navbar-expand-lg px-2 py-2">
       <div className="container-fluid">
-
-        <form className="d-flex me-auto" role="search" style={{ width: "450px" }}>
+        <div className="search-box">
           <input
-            className="form-control me-2"
+            className=" me-2 search-input"
             type="search"
             placeholder="Search..."
             aria-label="Search"
           />
-          <button className="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
+          </div>
 
         <button
           className="navbar-toggler"
@@ -33,24 +31,19 @@ const Navbar = () => {
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav align-items-center gap-3">
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to='/photos'>
                 <Home size={20} className="me-1" /> Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                <Image size={20} className="me-1" /> Gallery
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to='/add'>
                 <Plus size={20} className="me-1" /> Add
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to='/profile'>
                 <User size={20} className="me-1" /> My Profile
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
