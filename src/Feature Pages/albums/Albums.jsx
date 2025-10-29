@@ -1,21 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, FolderOpen, Heart, Image, Calendar } from "lucide-react";
+import {
+  Plus,
+  FolderOpen,
+  Heart,
+  Image,
+  Calendar,
+  Backpack,
+} from "lucide-react";
 import Navbar from "../../components/Navbar";
 import "./Album.css";
 import { useImageContext } from "../../context/ImageContext";
 import Loading from "../../components/Loading";
 import Sidebar from "../Sidebar/Sidebar";
+import AddNewAlbum from "./AddNewAlbum";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Albums = () => {
   const navigate = useNavigate();
   const {
     loading,
+    setLoading,
     fetchAlbums,
     albums,
     favoriteImages,
     setFavoriteImages,
     fetchFavoriteAlbums,
+    newAlbum,
+    setNewAlbum,
+    backendUrl,
   } = useImageContext();
   const [filter, setFilter] = useState("all");
   const [filteredAlbums, setFilteredAlbums] = useState([]);
@@ -39,10 +53,30 @@ const Albums = () => {
     navigate(`/album-details/${album.albumId}`);
   };
 
-  const toggleFavorite = (e, albumId) => {
+  const toggleFavorite = async (e, album) => {
     e.stopPropagation();
-    // Add your favorite toggle logic here
-    console.log("Toggle favorite for album:", albumId);
+    try {
+      const updatedFavorite = !album.isFavorite;
+      const { data } = await axios.patch(
+        `${backendUrl}/api/albums/${album.albumId}`,
+        { isFavorite: updatedFavorite },
+        { withCredentials: true }
+      );
+
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(
+        updatedFavorite
+          ? `Added "${album.name}" to favorites ❤️`
+          : `Removed "${album.name}" from favorites 💔`
+      );
+      fetchAlbums();
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   const getFavoriteCount = () => {
@@ -52,6 +86,7 @@ const Albums = () => {
   return (
     <>
       {loading && <Loading />}
+      {newAlbum && <AddNewAlbum />}
       <div className="main-layout">
         <Sidebar />
         <div className="content-area">
@@ -65,7 +100,9 @@ const Albums = () => {
                   <p>Organize your photos into beautiful collections</p>
                 </div>
 
-                <button className="primary-button">
+                <button
+                  className="primary-button"
+                  onClick={() => setNewAlbum(true)}>
                   <Plus size={18} />
                   Create Album
                 </button>
@@ -109,7 +146,7 @@ const Albums = () => {
                           className={`album-favorite-badge ${
                             album.isFavorite ? "active" : ""
                           }`}
-                          onClick={(e) => toggleFavorite(e, album._id)}>
+                          onClick={(e) => toggleFavorite(e, album)}>
                           <Heart
                             size={20}
                             fill={album.isFavorite ? "white" : "none"}
@@ -158,7 +195,7 @@ const Albums = () => {
                       ? "You haven't marked any albums as favorite yet"
                       : "Create your first album to organize your photos"}
                   </p>
-                  <button className="primary-button">
+                  <button className="primary-button" onClick={() => setNewAlbum(true)}>
                     <Plus size={18} />
                     Create Album
                   </button>

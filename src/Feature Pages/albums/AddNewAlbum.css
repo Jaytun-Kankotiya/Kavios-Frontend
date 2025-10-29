@@ -1,0 +1,93 @@
+.addalbum-outer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 99;
+}
+
+.addAlbum-main {
+  width: 450px;
+  background-color: #fff;
+  z-index: 100;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 20px 25px;
+  box-shadow: 0 4px 10px rgba(35, 35, 36, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.addAlbum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.addAlbum-header p {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.close-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-icon:hover {
+  transform: scale(1.1);
+}
+
+.addalbum-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.addalbum-inputs input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.addalbum-inputs input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.addAlbum-button {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.addAlbum-button:hover {
+  background-color: #0056b3;
+}
+
+.addAlbum-button:disabled {
+  background-color: #b0b0b0;
+  cursor: not-allowed;
+}

@@ -1,5 +1,3 @@
-/* Albums Page Styles */
-
 .albums-container {
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
@@ -17,7 +15,7 @@
 }
 
 .albums-header-content {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 24px;
   display: flex;
@@ -64,7 +62,7 @@
 
 /* Main Content */
 .albums-main-content {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 32px 24px;
   position: sticky;
