@@ -43,56 +43,57 @@ const AddNewImage = () => {
   };
 
   const addImageSubmitHandler = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!imageData.image) {
-      toast.error("Please select an image file to upload");
+  if (!imageData.image) {
+    toast.error("Please select an image file to upload");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("image", imageData.image);
+    formData.append("name", imageData.name);
+    formData.append("albumId", imageData.albumId);
+    formData.append("comments", imageData.comments || "");
+    formData.append("tags", imageData.tags || "");
+    formData.append("person", imageData.person || "");
+
+    const { data } = await axios.post(`${backendUrl}/api/images/upload`, formData,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    if (!data.success) {
+      toast.error(data.message);
       return;
     }
 
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", imageData.image);
-      formData.append("name", imageData.name);
-      formData.append("albumId", imageData.albumId);
-      formData.append("comments", JSON.stringify(imageData.comments ? [{ text: imageData.comments, createdAt: new Date() }] : []));
-      formData.append("tags", imageData.tags || "");
-      formData.append("person", imageData.person || "");
+    fetchImages();
+    toast.success(data.message);
+    setNewImage(false);
+    navigate("/photos");
 
-      const { data } = await axios.post(
-        `${backendUrl}/api/images/upload`,
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+    setImageData({
+      name: "",
+      albumId: "",
+      tags: "",
+      person: "",
+      comments: "",
+      image: null,
+    });
+  } catch (error) {
+    toast.error(error.response?.data?.message || error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
-      if (!data.success) {
-        toast.error(data.message);
-        return;
-      }
+  console.log(imageData)
 
-      fetchImages();
-      toast.success(data.message);
-      setNewImage(false);
-      navigate("/photos");
-
-      setImageData({
-        name: "",
-        albumId: "",
-        tags: "",
-        person: "",
-        comments: "",
-        image: null,
-      });
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <>

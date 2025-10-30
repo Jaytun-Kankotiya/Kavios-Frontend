@@ -106,11 +106,37 @@
   pointer-events: none;
 }
 
+.image-trash-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+}
+
+.image-trash-badge:hover {
+  transform: scale(1.1);
+}
+
+.photo-card:hover .image-trash-badge {
+    opacity: 1;
+}
+
 .photo-card:hover {
-  transform: translateY(-2px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   border-color: #e2e8f0;
 }
+
 
 .photo-card:hover::before {
   opacity: 1;

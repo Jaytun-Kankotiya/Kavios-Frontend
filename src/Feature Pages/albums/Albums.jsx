@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Plus,
-  FolderOpen,
-  Heart,
-  Image,
-  Calendar,
-  Backpack,
-} from "lucide-react";
+import { Plus, FolderOpen, Heart, Image, Calendar, Trash2 } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import "./Album.css";
 import { useImageContext } from "../../context/ImageContext";
@@ -83,6 +76,37 @@ const Albums = () => {
     return albums?.filter((album) => album.isFavorite).length || 0;
   };
 
+  const deleteHandler = async (albumId, albumName, imageCount) => {
+  const confirmDelete = window.confirm(
+    imageCount > 0
+      ? `Are you sure you want to delete "${albumName}"?\n\nThis album contains ${imageCount} image(s). Please delete all images first.`
+      : `Are you sure you want to delete "${albumName}"?`
+  );
+
+  if (!confirmDelete) return;
+
+  setLoading(true);
+  try {
+    const { data } = await axios.delete(
+      `${backendUrl}/api/albums/${albumId}`,
+      { withCredentials: true }
+    );
+
+    if (!data.success) {
+      toast.error(data.message);
+      return;
+    }
+
+    fetchAlbums();
+    toast.success(data.message);
+  } catch (error) {
+    console.error("Delete error:", error);
+    toast.error(error.response?.data?.message || error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <>
       {loading && <Loading />}
@@ -153,6 +177,18 @@ const Albums = () => {
                             color={album.isFavorite ? "white" : "#64748b"}
                           />
                         </div>
+                        <div
+                          className="album-trash-badge"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteHandler(
+                              album.albumId,
+                              album.name,
+                              album.imageCount
+                            );
+                          }}>
+                          <Trash2 size={20} />
+                        </div>
                       </div>
 
                       <div className="album-content">
@@ -195,7 +231,9 @@ const Albums = () => {
                       ? "You haven't marked any albums as favorite yet"
                       : "Create your first album to organize your photos"}
                   </p>
-                  <button className="primary-button" onClick={() => setNewAlbum(true)}>
+                  <button
+                    className="primary-button"
+                    onClick={() => setNewAlbum(true)}>
                     <Plus size={18} />
                     Create Album
                   </button>
