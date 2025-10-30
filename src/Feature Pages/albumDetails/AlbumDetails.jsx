@@ -12,16 +12,12 @@ import { toast } from "react-toastify";
 const AlbumDetails = () => {
   const { albumId } = useParams();
   const navigate = useNavigate();
-  const { loading, setLoading, fetchAlbums, albums, backendUrl } =
+  const { loading, setLoading, fetchAlbums, albums, backendUrl, setImagePreview } =
     useImageContext();
   const [viewMode, setViewMode] = useState("grid");
   const [selectedImages, setSelectedImages] = useState([]);
   const [currentAlbum, setCurrentAlbum] = useState(null);
   const [albumImages, setAlbumImages] = useState([]);
-
-  // useEffect(() => {
-  //   fetchAlbums();
-  // }, []);
 
   useEffect(() => {
     if (albums.length > 0 && albumId) {
@@ -211,6 +207,7 @@ const AlbumDetails = () => {
                       <img
                         src={image.thumbnailUrl || image.imageUrl}
                         alt={image.name || "Album image"}
+                        onClick={() => setImagePreview(image)}
                       />
                       <div className="list-item-content">
                         <h4 className="list-item-title">

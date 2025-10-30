@@ -1,10 +1,12 @@
-import { Plus, User, Home, Image } from "lucide-react";
+import { Upload, User, Home, Image } from "lucide-react";
 import '../index.css'
 import './Navbar.css'
 import '../Feature Pages/Sidebar/Sidebar.css'
 import { Link } from "react-router-dom";
+import { useImageContext } from "../context/ImageContext";
 
 const Navbar = () => {
+  const {newImage, setNewImage} = useImageContext()
   return (
     <nav className="navbar navbar-expand-lg px-2 py-2">
       <div className="container-fluid">
@@ -36,9 +38,9 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to='/add'>
-                <Plus size={20} className="me-1" /> Add
-              </Link>
+              <button className="nav-link" to='/' onClick={() => setNewImage(true)}>
+                <Upload size={20} className="me-1" /> Upload
+              </button>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to='/profile'>

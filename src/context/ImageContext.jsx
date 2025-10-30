@@ -18,6 +18,7 @@ const ImageProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [newAlbum, setNewAlbum] = useState(false)
   const [newImage, setNewImage] = useState(false)
+  const [imagePreview, setImagePreview] = useState(null)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -79,7 +80,6 @@ const ImageProvider = ({ children }) => {
 
   const value = {
     backendUrl,
-    loading,
 
     images,
     setImages,
@@ -106,7 +106,8 @@ const ImageProvider = ({ children }) => {
     setSharedWithMe,
     loading, setLoading,
     newAlbum, setNewAlbum,
-    newImage, setNewImage
+    newImage, setNewImage,
+    imagePreview, setImagePreview
   };
 
   return (

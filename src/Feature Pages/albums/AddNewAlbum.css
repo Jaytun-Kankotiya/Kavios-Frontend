@@ -59,14 +59,14 @@
   margin-bottom: 20px;
 }
 
-.addalbum-inputs input {
+.addalbum-inputs input, select {
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 10px;
   font-size: 15px;
 }
 
-.addalbum-inputs input:focus {
+.addalbum-inputs input:focus, .addalbum-inputs select:focus {
   border-color: #007bff;
   outline: none;
 }

@@ -7,18 +7,22 @@ import "./photo.css";
 import { useImageContext } from "../../context/ImageContext";
 import Loading from "../../components/Loading";
 import AddNewImage from "./AddNewPhoto";
+import ImagePreview from "./PhotoPreview";
 
 const Photos = () => {
-  const { loading, images, fetchImages, newImage, setNewImage } = useImageContext();
+  const { loading, images, fetchImages, newImage, setNewImage, imagePreview, setImagePreview } = useImageContext();
 
   useEffect(() => {
     fetchImages();
   }, []);
 
+  console.log(images)
+
   return (
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage />}
+      {<ImagePreview />}
       <div className="main-layout">
         <Sidebar />
         <div className="content-area">
@@ -32,14 +36,6 @@ const Photos = () => {
               </div>
               
               <div className="photos-header-actions">
-                <button className="view-toggle-btn">
-                  <Filter size={18} />
-                  Filter
-                </button>
-                <button className="view-toggle-btn active">
-                  <Grid3x3 size={18} />
-                  Grid
-                </button>
                 <button className="view-toggle-btn active" onClick={() => setNewImage(true)}>
                   <Plus size={18} />
                   Add an Image
@@ -55,6 +51,7 @@ const Photos = () => {
                   <div 
                     className="photo-card" 
                     key={image._id}
+                    onClick={() => setImagePreview(image)}
                   >
                     <img
                       src={image.thumbnailUrl || image.imageUrl}
