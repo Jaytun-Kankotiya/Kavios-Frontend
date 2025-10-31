@@ -22,62 +22,23 @@ const Photos = () => {
     setNewImage,
     imagePreview,
     setImagePreview,
+    imageToggleFavorite,
+    imageDeleteHandler
   } = useImageContext();
 
   useEffect(() => {
     fetchImages();
   }, []);
 
-  const deleteHandler = async (imageId) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `${backendUrl}/api/images/${imageId}`,
-        { withCredentials: true }
-      );
-      if (!data.success) {
-        toast.error(data.message);
-      }
-      fetchImages();
-      toast.success(data.message);
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
-    } finally {
-      setLoading(false);
-    }
+  const handleImageAdded = async () => {
+    setNewImage(false);
+    await fetchImages();
   };
-
-  const toggleFavorite = async (image) => {
-    setLoading(true);
-    console.log(image.imageId);
-    try {
-      const { data } = await axios.patch(
-        `${backendUrl}/api/images/${image.imageId}`,
-        { isFavorite: !image.isFavorite },
-        { withCredentials: true }
-      );
-      if (!data.success) {
-        toast.error(data.message);
-      }
-      fetchImages();
-      toast.success(
-        !image.isFavorite
-          ? `Added "${image.name}" to favorites ❤️`
-          : `Removed "${image.name}" from favorites 💔`
-      );
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  console.log(images)
 
   return (
     <>
       {loading && <Loading />}
-      {newImage && <AddNewImage />}
+      {newImage && <AddNewImage onClose={handleImageAdded} />}
       {<ImagePreview />}
       <div className="main-layout">
         <Sidebar />
@@ -93,7 +54,7 @@ const Photos = () => {
 
               <div className="photos-header-actions">
                 <button
-                  className="view-toggle-btn active"
+                  className="view-toggle-btn"
                   onClick={() => setNewImage(true)}>
                   <Plus size={18} />
                   Add an Image
@@ -121,7 +82,7 @@ const Photos = () => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleFavorite(image);
+                        imageToggleFavorite(image, fetchImages);
                       }}>
                       <Heart
                         size={20}
@@ -133,7 +94,7 @@ const Photos = () => {
                       className="image-trash-badge"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteHandler(image.imageId);
+                        imageDeleteHandler(image.imageId);
                       }}>
                       <Trash2 size={20} />
                     </div>

@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddNewImage = () => {
+const AddNewImage = ({onClose, defaultAlbumId  }) => {
   const {
     backendUrl,
     newImage,
@@ -19,10 +19,9 @@ const AddNewImage = () => {
   } = useImageContext();
 
   const navigate = useNavigate();
-
   const [imageData, setImageData] = useState({
     name: "",
-    albumId: "",
+    albumId: defaultAlbumId || "",
     tags: "",
     person: "",
     comments: "",
@@ -74,9 +73,7 @@ const AddNewImage = () => {
 
     fetchImages();
     toast.success(data.message);
-    setNewImage(false);
-    navigate("/photos");
-
+    onClose()
     setImageData({
       name: "",
       albumId: "",
@@ -92,9 +89,6 @@ const AddNewImage = () => {
   }
 };
 
-  console.log(imageData)
-
-
   return (
     <>
       <div className="addalbum-outer">
@@ -104,7 +98,7 @@ const AddNewImage = () => {
             <X
               size={22}
               className="close-icon"
-              onClick={() => setNewImage(false)}
+              onClick={onClose}
             />
           </div>
 
@@ -123,6 +117,7 @@ const AddNewImage = () => {
                 name="albumId"
                 value={imageData.albumId}
                 onChange={changeHandler}
+                disabled={defaultAlbumId}
                 required>
                 <option value="">Select Album</option>
                 {albums.map((album) => (
