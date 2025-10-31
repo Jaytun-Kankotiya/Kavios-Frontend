@@ -1,5 +1,5 @@
 .albums-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -320,7 +320,8 @@
   }
 
   .albums-main-content {
-    padding: 24px 16px;
+    padding: 20px 16px;
+    padding-bottom: 50px;
   }
 
   .albums-stats {

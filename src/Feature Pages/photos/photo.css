@@ -57,21 +57,12 @@
   transform: translateY(-1px);
 }
 
-/* .view-toggle-btn.active {
-  background: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
-} */
-
 /* Photos Page Styles */
-
 .photos-main {
-  /* position: sticky; */
-  /* top: 0; */
   padding: 24px 24px;
   max-width: 1600px;
-  margin: 0 auto;
-  min-height: calc(100vh - 80px);
+  margin: 10px auto;
+  /* min-height: calc(100vh - 80px); */
 }
 
 /* Photo Grid */
@@ -217,11 +208,11 @@
   min-height: 400px;
   font-size: 18px;
   color: #64748b;
-  background: white;
+  background: #F7F9FC;
   border-radius: 16px;
   border: 2px dashed #e2e8f0;
-  margin: 40px auto;
-  max-width: 600px;
+  margin: 40px 10px;
+  max-width: 100%;
   padding: 60px 40px;
   text-align: center;
   flex-direction: column;
@@ -229,7 +220,6 @@
 }
 
 .no-photos::before {
-  content: "📸";
   font-size: 64px;
   display: block;
   margin-bottom: 16px;

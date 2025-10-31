@@ -23,6 +23,8 @@ const Albums = () => {
     newAlbum,
     setNewAlbum,
     backendUrl,
+    albumToggleFavorite,
+    albumDeleteHandler
   } = useImageContext();
   const [filter, setFilter] = useState("all");
   const [filteredAlbums, setFilteredAlbums] = useState([]);
@@ -42,63 +44,8 @@ const Albums = () => {
     }
   }, [albums, filter]);
 
-  const toggleFavorite = async (e, album) => {
-    e.stopPropagation();
-    try {
-      const updatedFavorite = !album.isFavorite;
-      const { data } = await axios.patch(
-        `${backendUrl}/api/albums/${album.albumId}`,
-        { isFavorite: updatedFavorite },
-        { withCredentials: true }
-      );
-
-      if (!data.success) {
-        toast.error(data.message);
-        return;
-      }
-
-      toast.success(
-        updatedFavorite
-          ? `Added "${album.name}" to favorites ❤️`
-          : `Removed "${album.name}" from favorites 💔`
-      );
-      fetchAlbums();
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
-    }
-  };
-
   const getFavoriteCount = () => {
     return albums?.filter((album) => album.isFavorite).length || 0;
-  };
-
-  const deleteHandler = async (albumId, albumName, imageCount) => {
-    const confirmDelete = window.confirm(
-      imageCount > 0
-        ? `Are you sure you want to delete "${albumName}"?\n\nThis album contains ${imageCount} image(s). Please delete all images first.`
-        : `Are you sure you want to delete "${albumName}"?`
-    );
-    if (!confirmDelete) return;
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `${backendUrl}/api/albums/${albumId}`,
-        { withCredentials: true }
-      );
-
-      if (!data.success) {
-        toast.error(data.message);
-        return;
-      }
-
-      fetchAlbums();
-      toast.success(data.message);
-    } catch (error) {
-      console.error("Delete error:", error);
-      toast.error(error.response?.data?.message || error.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   // if (loading) {
@@ -174,7 +121,7 @@ const Albums = () => {
                             }`}
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleFavorite(e, album);
+                              albumToggleFavorite(album, fetchAlbums);
                             }}>
                             <Heart
                               size={20}
@@ -187,10 +134,11 @@ const Albums = () => {
                             className="album-trash-badge"
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteHandler(
+                              albumDeleteHandler(
                                 album.albumId,
                                 album.name,
-                                album.imageCount
+                                album.imageCount,
+                                fetchAlbums
                               );
                             }}>
                             <Trash2 size={20} />

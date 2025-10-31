@@ -186,6 +186,11 @@ body {
   width: 100%;
 }
 
+.favorite-main-layout {
+  display: flex;
+  width: 100%;
+}
+
 .content-area {
   flex-grow: 1;
   transition: margin-left 0.3s ease;
@@ -320,7 +325,7 @@ body {
 
   .content-area {
     margin-left: 0;
-    margin-bottom: 70px;
+    margin-bottom: 20px;
   }
 }
 
@@ -349,7 +354,7 @@ body {
   }
 
   .content-area {
-    margin-bottom: 65px;
+    margin-bottom: 20px;
   }
 }
 

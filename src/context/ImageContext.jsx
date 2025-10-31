@@ -70,38 +70,13 @@ const ImageProvider = ({ children }) => {
       if (!data?.success) {
         toast.error(data?.message || "Failed to fetch favorite albums");
       }
-      setFavoriteAlbums(favoriteAlbums);
+      setFavoriteAlbums(data.data);
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }
   };
-
-  // const imageToggleFavorite = async (image, onSuccessFetch) => {
-  //   setLoading(true);
-  //   console.log(image.imageId);
-  //   try {
-  //     const { data } = await axios.patch(
-  //       `${backendUrl}/api/images/${image.imageId}`,
-  //       { isFavorite: !image.isFavorite },
-  //       { withCredentials: true }
-  //     );
-  //     if (!data.success) {
-  //       toast.error(data.message);
-  //     }
-  //     fetchImages();
-  //     toast.success(
-  //       !image.isFavorite
-  //         ? `Added "${image.name}" to favorites ❤️`
-  //         : `Removed "${image.name}" from favorites 💔`
-  //     );
-  //   } catch (error) {
-  //     toast.error(error.response?.data?.message || error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const imageToggleFavorite = async (image, onSuccessFetch) => {
     setLoading(true);
@@ -117,8 +92,8 @@ const ImageProvider = ({ children }) => {
       } else {
         toast.success(
           !image.isFavorite
-            ? `Added "${image.name}" to favorites ❤️`
-            : `Removed "${image.name}" from favorites 💔`
+            ? `Added "${image.name}" to favorites`
+            : `Removed "${image.name}" from favorites`
         );
         if (onSuccessFetch) onSuccessFetch();
       }
@@ -148,6 +123,65 @@ const ImageProvider = ({ children }) => {
     }
   };
 
+  const albumToggleFavorite = async (album, onSuccessFetch) => {
+    try {
+      const updatedFavorite = !album.isFavorite;
+      const { data } = await axios.patch(
+        `${backendUrl}/api/albums/${album.albumId}`,
+        { isFavorite: updatedFavorite },
+        { withCredentials: true }
+      );
+
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(
+        updatedFavorite
+          ? `Added "${album.name}" to favorites`
+          : `Removed "${album.name}" from favorites`
+      );
+      if (onSuccessFetch) onSuccessFetch();
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const albumDeleteHandler = async (
+    albumId,
+    albumName,
+    imageCount,
+    onSuccessFetch
+  ) => {
+    const confirmDelete = window.confirm(
+      imageCount > 0
+        ? `Are you sure you want to delete "${albumName}"?\n\nThis album contains ${imageCount} image(s). Please delete all images first.`
+        : `Are you sure you want to delete "${albumName}"?`
+    );
+    if (!confirmDelete) return;
+    setLoading(true);
+    try {
+      const { data } = await axios.delete(
+        `${backendUrl}/api/albums/${albumId}`,
+        { withCredentials: true }
+      );
+
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+
+      if (onSuccessFetch) onSuccessFetch();
+      toast.success(data.message);
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     backendUrl,
 
@@ -155,35 +189,37 @@ const ImageProvider = ({ children }) => {
     setImages,
     fetchImages,
     imageToggleFavorite,
-
-    albums,
-    setAlbums,
-    fetchAlbums,
-
+    imageDeleteHandler,
     favoriteImages,
     setFavoriteImages,
-    fetchFavoriteAlbums,
-
-    favoriteAlbums,
-    setFavoriteAlbums,
-
-    recentlyAdded,
-    setRecentlyAdded,
     imageTrash,
     setImageTrash,
-    albumTrash,
-    setAlbumTrash,
-    sharedWithMe,
-    setSharedWithMe,
-    loading,
-    setLoading,
-    newAlbum,
-    setNewAlbum,
     newImage,
     setNewImage,
     imagePreview,
     setImagePreview,
-    imageDeleteHandler
+
+    albums,
+    setAlbums,
+    fetchAlbums,
+    favoriteAlbums,
+    newAlbum,
+    setNewAlbum,
+    albumTrash,
+    setAlbumTrash,
+    setFavoriteAlbums,
+    fetchFavoriteAlbums,
+    albumToggleFavorite,
+    albumDeleteHandler,
+
+    recentlyAdded,
+    setRecentlyAdded,
+
+    sharedWithMe,
+    setSharedWithMe,
+
+    loading,
+    setLoading,
   };
 
   return (
