@@ -91,12 +91,27 @@
 }
 
 .action-button.download:hover {
-  background: green;
+  background: rgba(0, 128, 0, 0.886);
   color: #fff;
+}
+
+.action-button.trash {
+  border: 1px solid red;
+  color: red;
 }
 
 .action-button.trash:hover {
   background: rgb(248, 75, 75);
+  color: #fff;
+}
+
+.action-button.cancel {
+  border: 1px solid blue;
+  color: blue;
+}
+
+.action-button.cancel:hover {
+  background: rgba(0, 0, 255, 0.685);
   color: #fff;
 }
 
@@ -179,15 +194,6 @@
   color: white;
 }
 
-.selection-badge {
-  background: #3b82f6;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
 /* Grid View */
 .images-grid {
   display: grid;
@@ -207,8 +213,17 @@
   background: white;
 }
 
-.image-card.selected {
-  border: 3px solid #3b82f6;
+.image-card.selected, .photo-card.selected {
+  border: 5px solid #3b82f6;
+}
+
+.selection-badge {
+  background: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .image-card img {

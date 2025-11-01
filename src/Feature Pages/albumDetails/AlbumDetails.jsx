@@ -29,6 +29,7 @@ const AlbumDetails = () => {
     backendUrl,
     setImagePreview,
     imageToggleFavorite,
+    toggleImageSelection,
   } = useImageContext();
   const [viewMode, setViewMode] = useState("grid");
   const [selectedImages, setSelectedImages] = useState([]);
@@ -83,12 +84,6 @@ const AlbumDetails = () => {
 
     fetchData();
   }, [albumId]);
-
-  const toggleImageSelection = (id) => {
-    setSelectedImages((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
 
   const handleBack = () => navigate(-1);
 
@@ -148,6 +143,14 @@ const AlbumDetails = () => {
     await fetchAlbumImages();
   };
 
+  const toggleImageSelect = (imageId) => {
+    setSelectedImages((prev) =>
+      prev.includes(imageId)
+        ? prev.filter((id) => id !== imageId)
+        : [...prev, imageId]
+    );
+  };
+
   return (
     <>
       {newImage && (
@@ -184,7 +187,7 @@ const AlbumDetails = () => {
                     selectedImages.length > 0 && `download`
                   }`}>
                   <Download size={16} />
-                  Download All
+                  {selectedImages.length > 0 ? `Download (${selectedImages.length})` : 'Download All'}
                 </button>
               </div>
             </div>
@@ -274,13 +277,17 @@ const AlbumDetails = () => {
                   {albumImages.map((image) => (
                     <div
                       key={image._id}
-                      onClick={() => toggleImageSelection(image.imageId)}
+                      onClick={() => toggleImageSelect(image.imageId)}
                       className={`image-card ${
                         selectedImages.includes(image.imageId) ? "selected" : ""
                       }`}>
                       <img
                         src={image.thumbnailUrl || image.imageUrl}
                         alt={image.name || "Album image"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setImagePreview(true);
+                        }}
                       />
                       <div
                         className={`album-favorite-badge ${
@@ -303,7 +310,7 @@ const AlbumDetails = () => {
                         )}
                         <span>{image.formattedSize || "Unknown size"}</span>
                       </div>
-                      {selectedImages.includes(image._id) && (
+                      {selectedImages.includes(image.imageId) && (
                         <div className="selection-checkmark">✓</div>
                       )}
                     </div>

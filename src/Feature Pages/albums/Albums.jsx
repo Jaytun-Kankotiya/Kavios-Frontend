@@ -29,6 +29,8 @@ const Albums = () => {
   const [filter, setFilter] = useState("all");
   const [filteredAlbums, setFilteredAlbums] = useState([]);
 
+  console.log(albums)
+
   useEffect(() => {
     fetchAlbums();
     fetchFavoriteAlbums();
@@ -48,9 +50,6 @@ const Albums = () => {
     return albums?.filter((album) => album.isFavorite).length || 0;
   };
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
 
   return (
     <>
@@ -66,8 +65,8 @@ const Albums = () => {
             <div className="albums-container">
               <div className="albums-header">
                 <div className="albums-header-content">
-                  <div className="albums-title-section">
-                    <h1>Albums</h1>
+                  <div className="photos-title-section">
+                    <h1>All Albums</h1>
                     <p>Organize your photos into beautiful collections</p>
                   </div>
 

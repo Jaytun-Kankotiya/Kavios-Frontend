@@ -119,6 +119,10 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
+.album-card.selected {
+  border: 5px solid #3b82f6;
+}
+
 .album-card:hover {
     transform: translateY(-2px);
 }
@@ -141,6 +145,7 @@
   background: linear-gradient(to top, rgba(189, 75, 75, 0.279) 0%, transparent 50%);
   transition: opacity 0.3s;
 }
+
 
 .album-image-count {
   color: white;

@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ImagePreview from "./photos/PhotoPreview";
 import AddNewAlbum from "./albums/AddNewAlbum";
+import { useNavigate } from "react-router-dom";
 
 const Favorite = () => {
   const {
@@ -29,8 +30,9 @@ const Favorite = () => {
   } = useImageContext();
 
   const [newImage, setNewImage] = useState(false);
-  // const [loading, setLoading] = useState(false);
   const [favoriteImages, setFavoriteImages] = useState([]);
+
+  const navigate = useNavigate()
 
   const fetchFavoriteImages = async () => {
     setLoading(true);
@@ -63,14 +65,12 @@ const Favorite = () => {
     await fetchFavoriteImages();
   };
 
-  console.log(favoriteAlbums);
-
   return (
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage onClose={handleImageAdded} />}
       {newAlbum && <AddNewAlbum />}
-      <ImagePreview />
+      <ImagePreview images={favoriteImages}/>
 
       {/* Favorite Images */}
       <div className="favorite-main-layout">
@@ -87,7 +87,7 @@ const Favorite = () => {
 
               <div className="photos-header-actions">
                 <button
-                  className="view-toggle-btn"
+                  className="primary-button"
                   onClick={() => setNewImage(true)}>
                   <Plus size={18} />
                   Add an Image
@@ -127,8 +127,7 @@ const Favorite = () => {
                       className="image-trash-badge"
                       onClick={(e) => {
                         e.stopPropagation();
-                        imageDeleteHandler(image.imageId);
-                        fetchFavoriteImages();
+                        imageDeleteHandler(image.imageId, fetchFavoriteImages);
                       }}>
                       <Trash2 size={20} />
                     </div>
@@ -169,9 +168,9 @@ const Favorite = () => {
                     <div className="photos-header-actions mt-2">
                       <button
                         className="view-toggle-btn"
-                        onClick={() => setNewImage(true)}>
+                        onClick={() => navigate('/photos')}>
                         <Plus size={18} />
-                        Add an Image
+                        Set Favorite Images
                       </button>
                     </div>
                   </div>
@@ -191,7 +190,7 @@ const Favorite = () => {
         <div className="content-area">
             <div className="albums-header">
               <div className="albums-header-content">
-                <div className="albums-title-section">
+                <div className="photos-title-section">
                   <h1>Favorite Albums</h1>
                   <p>
                     {favoriteAlbums.length} Albums • Organize your photos into
@@ -298,9 +297,9 @@ const Favorite = () => {
                   </p>
                   <button
                     className="primary-button"
-                    onClick={() => setNewAlbum(true)}>
+                    onClick={() => navigate('/albums')}>
                     <Plus size={18} />
-                    Create Album
+                    Set Favorite Albums
                   </button>
                 </div>
               )}

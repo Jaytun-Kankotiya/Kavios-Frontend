@@ -104,7 +104,7 @@ const ImageProvider = ({ children }) => {
     }
   };
 
-  const imageDeleteHandler = async (imageId) => {
+  const imageDeleteHandler = async (imageId, onSuccessFetch) => {
     setLoading(true);
     try {
       const { data } = await axios.delete(
@@ -114,7 +114,7 @@ const ImageProvider = ({ children }) => {
       if (!data.success) {
         toast.error(data.message);
       }
-      fetchImages();
+      if(onSuccessFetch) onSuccessFetch()
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
@@ -156,7 +156,7 @@ const ImageProvider = ({ children }) => {
   ) => {
     const confirmDelete = window.confirm(
       imageCount > 0
-        ? `Are you sure you want to delete "${albumName}"?\n\nThis album contains ${imageCount} image(s). Please delete all images first.`
+        ? `Are you sure you want to delete "${albumName}"?\n\nThis album contains ${imageCount} image${imageCount > 1 ? 's' : ''}. Please delete all images first.`
         : `Are you sure you want to delete "${albumName}"?`
     );
     if (!confirmDelete) return;
@@ -182,6 +182,12 @@ const ImageProvider = ({ children }) => {
     }
   };
 
+  const toggleImageSelection = (id) => {
+    setSelectedImages((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
   const value = {
     backendUrl,
 
@@ -198,6 +204,7 @@ const ImageProvider = ({ children }) => {
     setNewImage,
     imagePreview,
     setImagePreview,
+    toggleImageSelection,
 
     albums,
     setAlbums,

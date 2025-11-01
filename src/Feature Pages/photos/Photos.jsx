@@ -8,8 +8,6 @@ import { useImageContext } from "../../context/ImageContext";
 import Loading from "../../components/Loading";
 import AddNewImage from "./AddNewPhoto";
 import ImagePreview from "./PhotoPreview";
-import axios from "axios";
-import { toast } from "react-toastify";
 
 const Photos = () => {
   const {
@@ -39,7 +37,7 @@ const Photos = () => {
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage onClose={handleImageAdded} />}
-      {<ImagePreview />}
+      {<ImagePreview  images={images}/>}
       <div className="main-layout">
         <Sidebar />
         <div className="content-area">
@@ -54,7 +52,7 @@ const Photos = () => {
 
               <div className="photos-header-actions">
                 <button
-                  className="view-toggle-btn"
+                  className="primary-button"
                   onClick={() => setNewImage(true)}>
                   <Plus size={18} />
                   Add an Image
@@ -94,7 +92,7 @@ const Photos = () => {
                       className="image-trash-badge"
                       onClick={(e) => {
                         e.stopPropagation();
-                        imageDeleteHandler(image.imageId);
+                        imageDeleteHandler(image.imageId, fetchImages);
                       }}>
                       <Trash2 size={20} />
                     </div>

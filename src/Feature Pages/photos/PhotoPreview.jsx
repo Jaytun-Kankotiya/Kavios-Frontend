@@ -2,8 +2,10 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useImageContext } from "../../context/ImageContext";
 import { useEffect } from "react";
 
-const ImagePreview = () => {
-  const { imagePreview, setImagePreview, images } = useImageContext();
+const ImagePreview = ({ images: customImages }) => {
+  const { imagePreview, setImagePreview, images: contextImages } = useImageContext();
+
+  const images = customImages || contextImages || []
 
   const currentIndex = images.findIndex((img) => img._id === imagePreview?._id);
 
