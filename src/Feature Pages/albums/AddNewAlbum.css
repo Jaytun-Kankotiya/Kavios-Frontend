@@ -36,20 +36,28 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .addAlbum-header p {
   font-size: 22px;
-  font-weight: 500;
+  font-weight: 600;
+  margin: 0;
+  color: #1e293b;
 }
 
 .close-icon {
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
+  color: #64748b;
+  min-width: 22px;
+  min-height: 22px;
 }
 
 .close-icon:hover {
   transform: scale(1.1);
+  color: #1e293b;
 }
 
 .addalbum-inputs {

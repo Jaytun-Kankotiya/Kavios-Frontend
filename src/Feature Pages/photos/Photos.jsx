@@ -21,11 +21,14 @@ const Photos = () => {
     imagePreview,
     setImagePreview,
     imageToggleFavorite,
-    imageDeleteHandler
+    imageDeleteHandler,
+    search,
+    setSearch,
   } = useImageContext();
 
   useEffect(() => {
     fetchImages();
+    setSearch("");
   }, []);
 
   const handleImageAdded = async () => {
@@ -33,11 +36,16 @@ const Photos = () => {
     await fetchImages();
   };
 
+  const searchValue = search?.trim().toLowerCase() || "";
+  const filteredPhotos = !searchValue
+    ? images
+    : images.filter((img) => img.name?.toLowerCase().includes(searchValue));
+
   return (
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage onClose={handleImageAdded} />}
-      {<ImagePreview  images={images}/>}
+      {<ImagePreview images={images} />}
       <div className="main-layout">
         <Sidebar />
         <div className="content-area">
@@ -47,7 +55,7 @@ const Photos = () => {
             <div className="photos-header-content">
               <div className="photos-title-section">
                 <h1>All Photos</h1>
-                <p>{images?.length || 0} photos in your library</p>
+                <p>{filteredPhotos?.length || 0} photos in your library</p>
               </div>
 
               <div className="photos-header-actions">
@@ -62,9 +70,9 @@ const Photos = () => {
           </div>
 
           <div className="photos-main">
-            {images && images.length > 0 ? (
+            {filteredPhotos && filteredPhotos.length > 0 ? (
               <div className="photo-grid">
-                {images.map((image, index) => (
+                {filteredPhotos.map((image, index) => (
                   <div
                     className="photo-card"
                     key={image._id}
@@ -78,6 +86,7 @@ const Photos = () => {
                       className={`album-favorite-badge ${
                         image.isFavorite ? "active" : ""
                       }`}
+                      data-tooltip="Favorite"
                       onClick={(e) => {
                         e.stopPropagation();
                         imageToggleFavorite(image, fetchImages);
@@ -90,6 +99,7 @@ const Photos = () => {
                     </div>
                     <div
                       className="image-trash-badge"
+                      data-tooltip="Delete"
                       onClick={(e) => {
                         e.stopPropagation();
                         imageDeleteHandler(image.imageId, fetchImages);

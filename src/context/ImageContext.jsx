@@ -18,7 +18,9 @@ const ImageProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [newAlbum, setNewAlbum] = useState(false);
   const [newImage, setNewImage] = useState(false);
+  const [addNewSharing, setAddNewSharing] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [search, setSearch] = useState('')
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -219,6 +221,7 @@ const ImageProvider = ({ children }) => {
     albumToggleFavorite,
     albumDeleteHandler,
 
+    addNewSharing, setAddNewSharing,
     recentlyAdded,
     setRecentlyAdded,
 
@@ -227,6 +230,7 @@ const ImageProvider = ({ children }) => {
 
     loading,
     setLoading,
+    search, setSearch
   };
 
   return (

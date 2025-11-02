@@ -21,8 +21,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Trash = () => {
-  const { loading, setLoading, backendUrl, setImagePreview } =
-    useImageContext();
+  const {
+    loading,
+    setLoading,
+    backendUrl,
+    setImagePreview,
+    search,
+    setSearch,
+  } = useImageContext();
 
   const navigate = useNavigate();
   const [trashImages, setTrashImages] = useState([]);
@@ -417,7 +423,22 @@ const Trash = () => {
     };
 
     initializeTrash();
+    setSearch("");
   }, []);
+
+  const searchValue = search?.trim().toLowerCase() || "";
+  const filteredTrash = !searchValue
+    ? { images: trashImages, albums: trashAlbums }
+    : {
+        images: (trashImages || []).filter((img) =>
+          img.name?.toLowerCase().includes(searchValue)
+        ),
+        albums: (trashAlbums || []).filter((album) =>
+          album.name?.toLowerCase().includes(searchValue)
+        ),
+      };
+
+      console.log(filteredTrash.images)
 
   return (
     <>
@@ -434,12 +455,12 @@ const Trash = () => {
             <div className="photos-header-content">
               <div className="photos-title-section">
                 <h1>Trashed Images</h1>
-                <p>{trashImages?.length || 0} images in trash</p>
+                <p>{filteredTrash?.images.length || 0} images in trash</p>
               </div>
 
               {selectedImages.length === 0 ? (
                 <div className="photos-header-actions">
-                  {trashImages?.length > 0 && (
+                  {filteredTrash?.images.length > 0 && (
                     <button
                       className="view-toggle-btn trash"
                       onClick={emptyImageTrash}>
@@ -472,9 +493,9 @@ const Trash = () => {
           </div>
 
           <div className="photos-main">
-            {trashImages && trashImages.length > 0 ? (
+            {filteredTrash?.images.length > 0 ? (
               <div className="photo-grid">
-                {trashImages.map((image) => (
+                {filteredTrash.images.map((image) => (
                   <div
                     className={`photo-card ${
                       selectedImages.includes(image.imageId) ? "selected" : ""
@@ -606,9 +627,9 @@ const Trash = () => {
           </div>
 
           <div className="albums-main-content">
-            {trashAlbums && trashAlbums?.length > 0 ? (
+            {filteredTrash?.albums.length > 0 ? (
               <div className="albums-grid">
-                {trashAlbums?.map((album) => (
+                {filteredTrash?.albums.map((album) => (
                   <div
                     key={album._id}
                     className={`album-card ${

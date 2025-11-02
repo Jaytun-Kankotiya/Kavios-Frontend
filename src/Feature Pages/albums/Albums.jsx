@@ -24,7 +24,8 @@ const Albums = () => {
     setNewAlbum,
     backendUrl,
     albumToggleFavorite,
-    albumDeleteHandler
+    albumDeleteHandler,
+    search, setSearch
   } = useImageContext();
   const [filter, setFilter] = useState("all");
   const [filteredAlbums, setFilteredAlbums] = useState([]);
@@ -34,6 +35,7 @@ const Albums = () => {
   useEffect(() => {
     fetchAlbums();
     fetchFavoriteAlbums();
+    setSearch("")
   }, []);
 
   useEffect(() => {
@@ -50,15 +52,21 @@ const Albums = () => {
     return albums?.filter((album) => album.isFavorite).length || 0;
   };
 
+  const searchValue = search?.trim().toLowerCase() || "";
+  const filteredPhotos = !searchValue
+    ? albums
+    : albums.filter((album) =>
+        album.name?.toLowerCase().includes(searchValue)
+      );
 
   return (
     <>
       {newAlbum && <AddNewAlbum />}
+      <Sidebar />
       {loading ? (
         <Loading />
       ) : (
         <div className="main-layout">
-          <Sidebar />
           <div className="content-area">
             <Navbar />
 
@@ -97,9 +105,9 @@ const Albums = () => {
                   </button>
                 </div>
 
-                {filteredAlbums && filteredAlbums?.length > 0 ? (
+                {filteredPhotos && filteredPhotos?.length > 0 ? (
                   <div className="albums-grid">
-                    {filteredAlbums?.map((album) => (
+                    {filteredPhotos?.map((album) => (
                       <div
                         key={album._id}
                         className="album-card"
@@ -176,11 +184,11 @@ const Albums = () => {
                 ) : (
                   <div className="empty-albums">
                     <div className="empty-albums-icon">
-                      <FolderOpen size={40} color="#3b82f6" />
+                      <FolderOpen size={40} color="#3b82f6" /> 
                     </div>
                     <h3>No albums found</h3>
                     <p>
-                      {filter === "favorite"
+                      { search ? 'No albums match with your search' : filter === "favorite"
                         ? "You haven't marked any albums as favorite yet"
                         : "Create your first album to organize your photos"}
                     </p>

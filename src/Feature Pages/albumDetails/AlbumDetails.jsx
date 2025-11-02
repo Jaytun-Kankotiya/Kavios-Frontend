@@ -19,6 +19,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import AddNewImage from "../photos/AddNewPhoto";
 import "../albums/Album.css";
+import AddSharing from "../AddSharing";
 
 const AlbumDetails = () => {
   const { albumId } = useParams();
@@ -30,6 +31,9 @@ const AlbumDetails = () => {
     setImagePreview,
     imageToggleFavorite,
     toggleImageSelection,
+    addNewSharing,
+    setAddNewSharing,
+    search, setSearch
   } = useImageContext();
   const [viewMode, setViewMode] = useState("grid");
   const [selectedImages, setSelectedImages] = useState([]);
@@ -83,13 +87,10 @@ const AlbumDetails = () => {
     };
 
     fetchData();
+    setSearch("")
   }, [albumId]);
 
   const handleBack = () => navigate(-1);
-
-  // if (loading) {
-  //   return <Loading />;
-  // }
 
   if (!currentAlbum) {
     return (
@@ -151,10 +152,23 @@ const AlbumDetails = () => {
     );
   };
 
+  const searchValue = search?.trim().toLowerCase() || "";
+  const filteredPhotos = !searchValue
+    ? albumImages
+    : albumImages.filter((img) =>
+        img.name?.toLowerCase().includes(searchValue)
+      );
+
   return (
     <>
       {newImage && (
         <AddNewImage onClose={handleImageAdded} defaultAlbumId={albumId} />
+      )}
+      {addNewSharing && (
+        <AddSharing
+          albumId={currentAlbum.albumId}
+          currentSharedUsers={currentAlbum.sharedUsers || []}
+        />
       )}
       {loading && <Loading />}
       <div className="albumDetails-container">
@@ -178,7 +192,9 @@ const AlbumDetails = () => {
               </div>
 
               <div className="header-actions">
-                <button className="action-button">
+                <button
+                  className="action-button"
+                  onClick={() => setAddNewSharing(true)}>
                   <Share2 size={16} />
                   Share
                 </button>
@@ -187,7 +203,9 @@ const AlbumDetails = () => {
                     selectedImages.length > 0 && `download`
                   }`}>
                   <Download size={16} />
-                  {selectedImages.length > 0 ? `Download (${selectedImages.length})` : 'Download All'}
+                  {selectedImages.length > 0
+                    ? `Download (${selectedImages.length})`
+                    : "Download All"}
                 </button>
               </div>
             </div>
@@ -271,10 +289,10 @@ const AlbumDetails = () => {
               </div>
             </div>
 
-            {albumImages.length > 0 ? (
+            {filteredPhotos.length > 0 ? (
               viewMode === "grid" ? (
                 <div className="images-grid">
-                  {albumImages.map((image) => (
+                  {filteredPhotos.map((image) => (
                     <div
                       key={image._id}
                       onClick={() => toggleImageSelect(image.imageId)}
@@ -318,7 +336,7 @@ const AlbumDetails = () => {
                 </div>
               ) : (
                 <div className="images-list">
-                  {albumImages.map((image) => (
+                  {filteredPhotos.map((image) => (
                     <div
                       key={image._id}
                       onClick={() => toggleImageSelection(image.imageId)}
@@ -348,6 +366,14 @@ const AlbumDetails = () => {
                   ))}
                 </div>
               )
+            ) : search ? (
+              <div className="empty-album text-center mt-3">
+                <div className="empty-album-content">
+                  <Grid size={48} color="#cbd5e1" />
+                  <h3>No photos match your search</h3>
+                  <p>Please try a different keyword.</p>
+                </div>
+              </div>
             ) : (
               <div className="empty-album text-center mt-3">
                 <div className="empty-album-content">

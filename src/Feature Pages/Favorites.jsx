@@ -27,12 +27,13 @@ const Favorite = () => {
     setNewAlbum,
     albumDeleteHandler,
     albumToggleFavorite,
+    search, setSearch
   } = useImageContext();
 
   const [newImage, setNewImage] = useState(false);
   const [favoriteImages, setFavoriteImages] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchFavoriteImages = async () => {
     setLoading(true);
@@ -58,6 +59,7 @@ const Favorite = () => {
   useEffect(() => {
     fetchFavoriteImages();
     fetchFavoriteAlbums();
+    setSearch("")
   }, []);
 
   const handleImageAdded = async () => {
@@ -65,12 +67,25 @@ const Favorite = () => {
     await fetchFavoriteImages();
   };
 
+  const searchValue = search?.trim().toLowerCase() || "";
+
+  const filteredFavorites = !searchValue
+    ? { images: favoriteImages, albums: favoriteAlbums }
+    : {
+        images: (favoriteImages || []).filter((img) =>
+          img.name?.toLowerCase().includes(searchValue)
+        ),
+        albums: (favoriteAlbums || []).filter((album) =>
+          album.name?.toLowerCase().includes(searchValue)
+        ),
+      };
+
   return (
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage onClose={handleImageAdded} />}
       {newAlbum && <AddNewAlbum />}
-      <ImagePreview images={favoriteImages}/>
+      <ImagePreview images={favoriteImages} />
 
       {/* Favorite Images */}
       <div className="favorite-main-layout">
@@ -82,7 +97,7 @@ const Favorite = () => {
             <div className="photos-header-content">
               <div className="photos-title-section">
                 <h1>Favorite Images</h1>
-                <p>{favoriteImages?.length || 0} photos you love</p>
+                <p>{filteredFavorites.images?.length || 0} photos you love</p>
               </div>
 
               <div className="photos-header-actions">
@@ -97,9 +112,9 @@ const Favorite = () => {
           </div>
 
           <div className="photos-main">
-            {favoriteImages && favoriteImages.length > 0 ? (
+            {filteredFavorites.images?.length > 0 ? (
               <div className="photo-grid">
-                {favoriteImages.map((image) => (
+                {filteredFavorites.images?.map((image) => (
                   <div
                     className="photo-card"
                     key={image._id}
@@ -159,16 +174,18 @@ const Favorite = () => {
                         fontWeight: "600",
                         color: "#334155",
                       }}>
-                      No favorite images yet
+                      {search ? "No photos found" : "No favorite images yet"}
                     </h3>
                     <p
                       style={{ margin: 0, fontSize: "15px", color: "#64748b" }}>
-                      Mark some photos as favorites to see them here
+                      {search
+                        ? "No photos match your search"
+                        : "Mark some photos as favorites to see them here"}
                     </p>
                     <div className="photos-header-actions mt-2">
                       <button
                         className="view-toggle-btn"
-                        onClick={() => navigate('/photos')}>
+                        onClick={() => navigate("/photos")}>
                         <Plus size={18} />
                         Set Favorite Images
                       </button>
@@ -182,128 +199,135 @@ const Favorite = () => {
       </div>
 
       {/* Favorite Albums */}
-      <div
-        style={{ height: "1px", backgroundColor: "#e2e8f0", margin: "0" }}
-      />
+      <div style={{ height: "1px", backgroundColor: "#e2e8f0", margin: "0" }} />
 
       <div className="favorite-main-layout">
         <div className="content-area">
-            <div className="albums-header">
-              <div className="albums-header-content">
-                <div className="photos-title-section">
-                  <h1>Favorite Albums</h1>
-                  <p>
-                    {favoriteAlbums.length} Albums • Organize your photos into
-                    beautiful collections
-                  </p>
-                </div>
-
-                <button
-                  className="primary-button"
-                  onClick={() => setNewAlbum(true)}>
-                  <Plus size={18} />
-                  Create Album
-                </button>
+          <div className="albums-header">
+            <div className="albums-header-content">
+              <div className="photos-title-section">
+                <h1>Favorite Albums</h1>
+                <p>
+                  {filteredFavorites.albums?.length} Albums • Organize your
+                  photos into beautiful collections
+                </p>
               </div>
+
+              <button
+                className="primary-button"
+                onClick={() => setNewAlbum(true)}>
+                <Plus size={18} />
+                Create Album
+              </button>
             </div>
+          </div>
 
-            <div className="albums-main-content">
-              {favoriteAlbums && favoriteAlbums?.length > 0 ? (
-                <div className="albums-grid">
-                  {favoriteAlbums?.map((album) => (
-                    <div
-                      key={album._id}
-                      className="album-card"
-                      onClick={() =>
-                        navigate(`/album-details/${album.albumId}`)
-                      }>
-                      <div className="album-cover">
-                        <div className="album-cover-overlay">
-                          <span className="album-image-count">
-                            <Image size={16} />
-                            {album.imageCount || 0} photos
-                          </span>
-                        </div>
-
-                        <div
-                          className={`album-favorite-badge ${
-                            album.isFavorite ? "active" : ""
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            albumToggleFavorite(album, fetchFavoriteAlbums);
-                          }}>
-                          <Heart
-                            size={20}
-                            fill={album.isFavorite ? "white" : "none"}
-                            color={album.isFavorite ? "white" : "#64748b"}
-                          />
-                        </div>
-
-                        <div
-                          className="album-trash-badge"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            albumDeleteHandler(
-                              album.albumId,
-                              album.name,
-                              album.imageCount,
-                              fetchFavoriteAlbums
-                            );
-                          }}>
-                          <Trash2 size={20} />
-                        </div>
+          <div className="albums-main-content">
+            {filteredFavorites.albums?.length > 0 ? (
+              <div className="albums-grid">
+                {filteredFavorites.albums?.map((album) => (
+                  <div
+                    key={album._id}
+                    className="album-card"
+                    onClick={() => navigate(`/album-details/${album.albumId}`)}>
+                    <div className="album-cover">
+                      <div className="album-cover-overlay">
+                        <span className="album-image-count">
+                          <Image size={16} />
+                          {album.imageCount || 0} photos
+                        </span>
                       </div>
 
-                      <div className="album-content">
-                        <div className="album-header">
-                          <h3 className="album-title">{album.name}</h3>
-                        </div>
+                      <div
+                        className={`album-favorite-badge ${
+                          album.isFavorite ? "active" : ""
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          albumToggleFavorite(album, fetchFavoriteAlbums);
+                        }}>
+                        <Heart
+                          size={20}
+                          fill={album.isFavorite ? "white" : "none"}
+                          color={album.isFavorite ? "white" : "#64748b"}
+                        />
+                      </div>
 
-                        <p className="album-description">
-                          {album.description || "No description"}
-                        </p>
-
-                        <div className="album-footer">
-                          <span className="album-date">
-                            <Calendar size={14} />
-                            {new Date(album.createdAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              }
-                            )}
-                          </span>
-                          <span className="album-size">
-                            {album.formattedSize || "0 Bytes"}
-                          </span>
-                        </div>
+                      <div
+                        className="album-trash-badge"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          albumDeleteHandler(
+                            album.albumId,
+                            album.name,
+                            album.imageCount,
+                            fetchFavoriteAlbums
+                          );
+                        }}>
+                        <Trash2 size={20} />
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="empty-albums">
-                  <div className="empty-albums-icon">
-                    <FolderOpen size={40} color="#3b82f6" />
+
+                    <div className="album-content">
+                      <div className="album-header">
+                        <h3 className="album-title">{album.name}</h3>
+                      </div>
+
+                      <p className="album-description">
+                        {album.description || "No description"}
+                      </p>
+
+                      <div className="album-footer">
+                        <span className="album-date">
+                          <Calendar size={14} />
+                          {new Date(album.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )}
+                        </span>
+                        <span className="album-size">
+                          {album.formattedSize || "0 Bytes"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <h3>No albums found</h3>
-                  <p>
-                    {favoriteAlbums.length === 0
-                      ? "You haven't marked any albums as favorite yet"
-                      : "Create your first album to organize your photos"}
-                  </p>
-                  <button
-                    className="primary-button"
-                    onClick={() => navigate('/albums')}>
-                    <Plus size={18} />
-                    Set Favorite Albums
-                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-albums">
+                <div className="empty-albums-icon">
+                  <FolderOpen size={40} color="#3b82f6" />
                 </div>
-              )}
-            </div>
+                <h3
+                  style={{
+                    margin: "0 0 8px",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    color: "#334155",
+                  }}>
+                  {search
+                    ? "No albums found"
+                    : "No favorite albums yet"}
+                </h3>
+                <p style={{ margin: 0, fontSize: "15px", color: "#64748b" }}>
+                  {favoriteAlbums.length === 0
+                    ? "You haven't marked any albums as favorite yet"
+                    : "No albums match your search"}
+                </p>
+
+                <button
+                  className="primary-button mt-2"
+                  onClick={() => navigate("/albums")}>
+                  <Plus size={18} />
+                  Set Favorite Albums
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

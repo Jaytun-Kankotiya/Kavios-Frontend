@@ -27,6 +27,8 @@ const RecentlyAdded = () => {
     imageDeleteHandler,
     albumDeleteHandler,
     setImagePreview,
+    search,
+    setSearch,
   } = useImageContext();
 
   const [recentImages, setRecentImages] = useState([]);
@@ -68,9 +70,8 @@ const RecentlyAdded = () => {
   useEffect(() => {
     fetchRecentImages();
     fetchRecentAlbums();
+    setSearch("");
   }, []);
-
-  console.log(recentAlbums);
 
   const handleImageAdded = async () => {
     setNewImage(false);
@@ -82,12 +83,26 @@ const RecentlyAdded = () => {
     await fetchRecentAlbums();
   };
 
+  const searchValue = search?.trim().toLowerCase() || "";
+  const filteredFavorites = !searchValue
+    ? { images: recentImages, albums: recentAlbums }
+    : {
+        images: (recentImages || []).filter((img) =>
+          img.name?.toLowerCase().includes(searchValue)
+        ),
+        albums: (recentAlbums || []).filter((album) =>
+          album.name?.toLowerCase().includes(searchValue)
+        ),
+      };
+
+      console.log(filteredFavorites.albums)
+
   return (
     <>
       {loading && <Loading />}
       {newImage && <AddNewImage onClose={handleImageAdded} />}
       {newAlbum && <AddNewAlbum onClose={handleAlbumAdded} />}
-      <ImagePreview images={recentImages}/>
+      <ImagePreview images={recentImages} />
 
       <div className="favorite-main-layout">
         <Sidebar />
@@ -98,7 +113,9 @@ const RecentlyAdded = () => {
             <div className="photos-header-content">
               <div className="photos-title-section">
                 <h1>Recently Added Images</h1>
-                <p>{recentImages.length} new memories captured this week</p>
+                <p>
+                  {filteredFavorites.images.length} new memories captured this week
+                </p>
               </div>
               <div className="photos-header-actions">
                 <button
@@ -112,9 +129,9 @@ const RecentlyAdded = () => {
           </div>
 
           <div className="photos-main">
-            {recentImages.length > 0 ? (
+            {filteredFavorites.images.length > 0 ? (
               <div className="photo-grid">
-                {recentImages.map((image) => (
+                {filteredFavorites.images.map((image) => (
                   <div key={image._id} className="photo-card">
                     <img
                       src={image.thumbnailUrl || image.imageUrl}
@@ -163,21 +180,24 @@ const RecentlyAdded = () => {
               </div>
             ) : (
               !loading && (
-                <div className="no-photos text-center">
+                <div className="empty-albums">
                   <Image size={64} color="#cbd5e1" />
                   <h3>No images found</h3>
-                  <p>Add some photos to see them here</p>
+                  <p>
+                    {search
+                      ? "No images match with your search"
+                      : "Add some photos to see them here"}
+                  </p>
                 </div>
               )
             )}
           </div>
 
-          {/* Recently Added Albums */}
           <div className="albums-header">
             <div className="albums-header-content">
               <div className="photos-title-section">
                 <h1>Recently Added Albums</h1>
-                <p>{recentAlbums.length} new albums created this week</p>
+                <p>{filteredFavorites.albums.length} new albums created this week</p>
               </div>
               <button
                 className="primary-button"
@@ -189,9 +209,9 @@ const RecentlyAdded = () => {
           </div>
 
           <div className="albums-main-content">
-            {recentAlbums.length > 0 ? (
+            {filteredFavorites.albums.length > 0 ? (
               <div className="albums-grid">
-                {recentAlbums.map((album) => (
+                {filteredFavorites.albums.map((album) => (
                   <div
                     key={album._id}
                     className="album-card"
@@ -261,9 +281,14 @@ const RecentlyAdded = () => {
                 ))}
               </div>
             ) : (
-              <div className="empty-albums text-center">
+              <div className="empty-albums">
                 <FolderOpen size={40} color="#3b82f6" />
                 <h3>No albums found</h3>
+                <p>
+                  {search
+                    ? "No albums match with your search"
+                    : "Add some albums to see them here"}
+                </p>
               </div>
             )}
           </div>
