@@ -10,6 +10,7 @@ import {
   Calendar,
   History,
   Hourglass,
+  BadgeCheck,
 } from "lucide-react";
 import { useImageContext } from "../context/ImageContext";
 import ImagePreview from "./photos/PhotoPreview";
@@ -19,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "./albumDetails/AlbumDetails.css";
 
 const Trash = () => {
   const {
@@ -438,7 +440,7 @@ const Trash = () => {
         ),
       };
 
-      console.log(filteredTrash.images)
+  console.log(filteredTrash.images);
 
   return (
     <>
@@ -507,9 +509,6 @@ const Trash = () => {
                       alt={image.name || "Photo"}
                       className="photo-img"
                     />
-                    {selectedImages.includes(image.imageId) && (
-                      <div className="selection-checkmark">✓</div>
-                    )}
 
                     {selectedImages.length === 0 && (
                       <>
@@ -648,10 +647,6 @@ const Trash = () => {
                         </span>
                       </div>
 
-                      {selectedAlbums.includes(album.albumId) && (
-                        <div className="selection-checkmark">✓</div>
-                      )}
-
                       {selectedAlbums.length === 0 && (
                         <>
                           <div
@@ -680,6 +675,12 @@ const Trash = () => {
                         </>
                       )}
                     </div>
+
+                    {selectedAlbums.includes(album.albumId) && (
+                      <div className="trash-selection-checkmark active">
+                        <BadgeCheck size={26} />
+                      </div>
+                    )}
 
                     <div className="album-content">
                       <div className="album-header">

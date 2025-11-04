@@ -80,6 +80,8 @@ const Favorite = () => {
         ),
       };
 
+      console.log(favoriteAlbums)
+
   return (
     <>
       {loading && <Loading />}
@@ -87,7 +89,6 @@ const Favorite = () => {
       {newAlbum && <AddNewAlbum />}
       <ImagePreview images={favoriteImages} />
 
-      {/* Favorite Images */}
       <div className="favorite-main-layout">
         <Sidebar />
         <div className="content-area">
@@ -234,7 +235,7 @@ const Favorite = () => {
                       <div className="album-cover-overlay">
                         <span className="album-image-count">
                           <Image size={16} />
-                          {album.imageCount || 0} photos
+                          {album.totalImages || 0} photos
                         </span>
                       </div>
 

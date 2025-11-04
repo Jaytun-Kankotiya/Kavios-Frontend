@@ -128,7 +128,6 @@
 
 /* Cover Section */
 .albumDetails-cover {
-  /* position: relative; */
   height: 300px;
   border-radius: 16px;
   overflow: hidden;
@@ -199,7 +198,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  /* margin-bottom: 20px; */
 }
 
 .image-card {
@@ -208,28 +206,90 @@
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #e2e8f0;
+  transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+  border: 2px solid transparent;
   background: white;
 }
 
-.image-card.selected, .photo-card.selected {
-  border: 5px solid #3b82f6;
+.image-card:not(.selection-mode):hover {
+  border: 2px solid rgba(59, 130, 246, 0.5);
 }
 
-.selection-badge {
-  background: #3b82f6;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
+.image-card.selection-mode:hover {
+  border: 2px solid rgba(59, 130, 246, 0.5);
+}
+
+.image-card.selected {
+  border: 2px solid #3b82f6;
 }
 
 .image-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.selection-checkmark {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.selection-checkmark::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #94a3b8;
+  transition: all 0.2s;
+}
+
+.image-card:not(.selection-mode):hover .selection-checkmark {
+  opacity: 0.7;
+}
+
+.image-card.selection-mode .selection-checkmark {
+  opacity: 0.7;
+}
+
+.image-card.selected .selection-checkmark {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  opacity: 1 !important;
+}
+
+.image-card.selected .selection-checkmark::after {
+  display: none;
+}
+
+.image-card.selected .selection-checkmark svg {
+  display: block;
+  opacity: 1;
+  color: white;
+}
+
+.image-card.selection-mode:not(.selected) .selection-checkmark svg {
+  display: block;
+  opacity: 0.3;
+}
+
+.image-card.selection-mode:not(.selected) .selection-checkmark::after {
+  display: none;
 }
 
 .image-overlay {
@@ -242,6 +302,7 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 16px;
+  pointer-events: none;
 }
 
 .image-card:hover .image-overlay {
@@ -266,20 +327,14 @@
   font-size: 11px;
 }
 
-.selection-checkmark {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+/* Selection badge */
+.selection-badge {
   background: #3b82f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* List View */
@@ -341,6 +396,48 @@
   margin: 0;
   font-size: 13px;
   color: #64748b;
+}
+
+/* Album card styles */
+.album-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+  border: 2px solid transparent;
+  background: white;
+}
+
+.album-card:hover {
+  border: 1px solid #3b82f6;
+}
+
+.trash-selection-checkmark {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.album-card.selected .trash-selection-checkmark {
+  background: #3bf65a;
+  border-color: #3bf65a;
+  color: white;
+  opacity: 1;
 }
 
 /* Responsive Design */

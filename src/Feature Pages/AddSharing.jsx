@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import './Sidebar/Sidebar.css';
 import './FeaturePages.css'
+import { useNavigate } from "react-router-dom";
 
 const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
   const { loading, setLoading, addNewSharing, setAddNewSharing, backendUrl } = useImageContext();
@@ -23,7 +24,6 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address");
@@ -45,7 +45,8 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
 
       toast.success(data.message);
       setSharedUsers(data.data.sharedUsers);
-      setEmail(""); // Clear input after successful share
+      setAddNewSharing(false)
+      setEmail("");
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {

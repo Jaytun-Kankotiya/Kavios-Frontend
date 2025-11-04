@@ -120,11 +120,7 @@
 }
 
 .album-card.selected {
-  border: 5px solid #3b82f6;
-}
-
-.album-card:hover {
-    transform: translateY(-2px);
+  border: 2px solid #3b82f6;
 }
 
 .album-cover {
