@@ -1,12 +1,12 @@
-import axios from "axios";
 import { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
+import api from "../utils/axios";
 
 const ImageContext = createContext();
 
 export const useImageContext = () => useContext(ImageContext);
 
-const ImageProvider = ({ children }) => {
+export const ImageProvider = ({ children }) => {
   const [images, setImages] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [favoriteImages, setFavoriteImages] = useState([]);
@@ -27,7 +27,7 @@ const ImageProvider = ({ children }) => {
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/images`, {
+      const { data } = await api.get(`${backendUrl}/api/images`, {
         withCredentials: true,
       });
 
@@ -47,7 +47,7 @@ const ImageProvider = ({ children }) => {
   const fetchAlbums = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/albums`, {
+      const { data } = await api.get(`${backendUrl}/api/albums`, {
         withCredentials: true,
       });
       if (!data?.success) {
@@ -64,7 +64,7 @@ const ImageProvider = ({ children }) => {
   const fetchFavoriteAlbums = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(
+      const { data } = await api.get(
         `${backendUrl}/api/albums/favorites/all`,
         { withCredentials: true }
       );
@@ -83,7 +83,7 @@ const ImageProvider = ({ children }) => {
   const imageToggleFavorite = async (image, onSuccessFetch) => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
+      const { data } = await api.patch(
         `${backendUrl}/api/images/${image.imageId}`,
         { isFavorite: !image.isFavorite },
         { withCredentials: true }
@@ -109,7 +109,7 @@ const ImageProvider = ({ children }) => {
   const imageDeleteHandler = async (imageId, onSuccessFetch) => {
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/images/${imageId}`,
         { withCredentials: true }
       );
@@ -128,7 +128,7 @@ const ImageProvider = ({ children }) => {
   const albumToggleFavorite = async (album, onSuccessFetch) => {
     try {
       const updatedFavorite = !album.isFavorite;
-      const { data } = await axios.patch(
+      const { data } = await api.patch(
         `${backendUrl}/api/albums/${album.albumId}`,
         { isFavorite: updatedFavorite },
         { withCredentials: true }
@@ -164,7 +164,7 @@ const ImageProvider = ({ children }) => {
     if (!confirmDelete) return;
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/albums/${albumId}`,
         { withCredentials: true }
       );
@@ -237,5 +237,3 @@ const ImageProvider = ({ children }) => {
     <ImageContext.Provider value={value}>{children}</ImageContext.Provider>
   );
 };
-
-export default ImageProvider;

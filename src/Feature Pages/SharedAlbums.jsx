@@ -6,8 +6,8 @@ import AddSharing from "./AddSharing";
 import Sidebar from "./Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../utils/axios";
 
 const SharedAlbums = () => {
   const {
@@ -24,7 +24,7 @@ const SharedAlbums = () => {
   const fetchSharedAlbums = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/albums/shared`, {
+      const { data } = await api.get(`${backendUrl}/api/albums/shared`, {
         withCredentials: true,
       });
       if (!data.success) {
@@ -42,7 +42,7 @@ const SharedAlbums = () => {
   const removeFromSharing = async (id) => {
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/albums/${id}/remove_access`,
         {},
         { withCredentials: true }

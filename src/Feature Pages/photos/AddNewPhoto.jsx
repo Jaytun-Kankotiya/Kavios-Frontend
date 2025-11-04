@@ -1,16 +1,13 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useImageContext } from "../../context/ImageContext";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import api from "../../utils/axios";
 
 const AddNewImage = ({onClose, defaultAlbumId  }) => {
   const {
     backendUrl,
-    newImage,
-    setNewImage,
     loading,
     setLoading,
     albums,
@@ -18,7 +15,6 @@ const AddNewImage = ({onClose, defaultAlbumId  }) => {
     fetchImages,
   } = useImageContext();
 
-  const navigate = useNavigate();
   const [imageData, setImageData] = useState({
     name: "",
     albumId: defaultAlbumId || "",
@@ -59,7 +55,7 @@ const AddNewImage = ({onClose, defaultAlbumId  }) => {
     formData.append("tags", imageData.tags || "");
     formData.append("person", imageData.person || "");
 
-    const { data } = await axios.post(`${backendUrl}/api/images/upload`, formData,
+    const { data } = await api.post(`${backendUrl}/api/images/upload`, formData,
       {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },

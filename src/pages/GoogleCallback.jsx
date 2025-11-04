@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useImageContext } from "../context/ImageContext";
@@ -44,6 +43,7 @@ const GoogleCallback = () => {
             }
           }
         );
+        
         setStatus('success');
         setMessage('Login successful!');
         
@@ -51,7 +51,7 @@ const GoogleCallback = () => {
           window.opener.postMessage(
             { 
               type: "GOOGLE_AUTH_SUCCESS", 
-              user: response.data.user 
+              user: response.data.user
             },
             window.location.origin
           );
@@ -65,7 +65,6 @@ const GoogleCallback = () => {
           }, 1500);
         }
       } catch (error) {
-        
         const errorMessage = error.response?.data?.message || error.message || "Unknown error";
         setStatus('error');
         setMessage(errorMessage);

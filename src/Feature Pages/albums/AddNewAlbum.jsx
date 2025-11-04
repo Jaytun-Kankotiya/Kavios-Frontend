@@ -2,9 +2,9 @@ import { X } from "lucide-react";
 import "./AddNewAlbum.css";
 import { useState } from "react";
 import { useImageContext } from "../../context/ImageContext";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import api from "../../utils/axios";
 
 const AddNewAlbum = () => {
   const { backendUrl, loading, setLoading, fetchAlbums, setNewAlbum } = useImageContext();
@@ -24,7 +24,7 @@ const AddNewAlbum = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/albums`,
         albumData,
         { withCredentials: true }

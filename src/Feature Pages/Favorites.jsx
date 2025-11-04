@@ -7,11 +7,11 @@ import "./photos/photo.css";
 import Loading from "../components/Loading";
 import AddNewImage from "./photos/AddNewPhoto";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import ImagePreview from "./photos/PhotoPreview";
 import AddNewAlbum from "./albums/AddNewAlbum";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 const Favorite = () => {
   const {
@@ -38,7 +38,7 @@ const Favorite = () => {
   const fetchFavoriteImages = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(
+      const { data } = await api.get(
         `${backendUrl}/api/images/favorites/all`,
         {
           withCredentials: true,
@@ -80,7 +80,6 @@ const Favorite = () => {
         ),
       };
 
-      console.log(favoriteAlbums)
 
   return (
     <>

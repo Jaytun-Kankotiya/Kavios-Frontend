@@ -32,7 +32,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/albums/${albumId}/share`,
         { emails: [email] },
         { withCredentials: true }
@@ -57,7 +57,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
   const handleRemoveUser = async (userEmail) => {
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/albums/${albumId}/remove_access`,
         { email: userEmail },
         { withCredentials: true }

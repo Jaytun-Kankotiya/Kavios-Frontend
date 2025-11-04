@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import "./index.css";
 import GoogleCallback from "./pages/GoogleCallback";
-import { Bounce, Flip, ToastContainer, Zoom, toast } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -13,6 +13,7 @@ import Trash from "./Feature Pages/Trash";
 import SharedAlbums from "./Feature Pages/SharedAlbums";
 import Albums from "./Feature Pages/albums/Albums";
 import AlbumDetails from "./Feature Pages/albumDetails/AlbumDetails";
+import MyProfile from "./components/MyProfile";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/profile" element={<MyProfile />} />
           <Route path="/auth/callback" element={<GoogleCallback />} />
           <Route path="/photos" element={<Photos />} />
           <Route path="/albums" element={<Albums />} />

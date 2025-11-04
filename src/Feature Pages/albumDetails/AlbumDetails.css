@@ -111,7 +111,7 @@
 }
 
 .action-button.cancel:hover {
-  background: rgba(0, 0, 255, 0.685);
+  background: rgba(0, 0, 255, 0.604);
   color: #fff;
 }
 
@@ -249,14 +249,11 @@
   cursor: pointer;
 }
 
-.selection-checkmark::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid #94a3b8;
-  transition: all 0.2s;
+.selection-checkmark.active {
+  background: #3bf65a;
+  border-color: #3bf65a;
+  color: white;
+  opacity: 1;
 }
 
 .image-card:not(.selection-mode):hover .selection-checkmark {
@@ -281,15 +278,6 @@
   display: block;
   opacity: 1;
   color: white;
-}
-
-.image-card.selection-mode:not(.selected) .selection-checkmark svg {
-  display: block;
-  opacity: 0.3;
-}
-
-.image-card.selection-mode:not(.selected) .selection-checkmark::after {
-  display: none;
 }
 
 .image-overlay {
@@ -411,26 +399,6 @@
 
 .album-card:hover {
   border: 1px solid #3b82f6;
-}
-
-.trash-selection-checkmark {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #cbd5e1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  opacity: 0;
-  transition: all 0.2s;
-  z-index: 20;
-  cursor: pointer;
 }
 
 .album-card.selected .trash-selection-checkmark {

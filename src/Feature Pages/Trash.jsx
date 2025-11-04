@@ -17,22 +17,19 @@ import ImagePreview from "./photos/PhotoPreview";
 import Sidebar from "./Sidebar/Sidebar";
 import "./Sidebar/Sidebar.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "./albumDetails/AlbumDetails.css";
+import api from "../utils/axios";
 
 const Trash = () => {
   const {
     loading,
     setLoading,
     backendUrl,
-    setImagePreview,
     search,
     setSearch,
   } = useImageContext();
 
-  const navigate = useNavigate();
   const [trashImages, setTrashImages] = useState([]);
   const [trashAlbums, setTrashAlbums] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
@@ -41,7 +38,7 @@ const Trash = () => {
   const fetchImageTrash = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/images/trash/all`, {
+      const { data } = await api.get(`${backendUrl}/api/images/trash/all`, {
         withCredentials: true,
       });
       if (!data.success) {
@@ -58,7 +55,7 @@ const Trash = () => {
   const fetchAlbumTrash = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/albums/trash/all`, {
+      const { data } = await api.get(`${backendUrl}/api/albums/trash/all`, {
         withCredentials: true,
       });
 
@@ -97,7 +94,7 @@ const Trash = () => {
 
   const restoreImage = async (id) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/images/trash/${id}/restore`,
         {},
         { withCredentials: true }
@@ -115,7 +112,7 @@ const Trash = () => {
 
   const restoreAlbum = async (id) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await api.post(
         `${backendUrl}/api/albums/trash/${id}/restore`,
         {},
         { withCredentials: true }
@@ -208,7 +205,7 @@ const Trash = () => {
       const results = await Promise.all(
         selectedImages.map(async (imageId) => {
           try {
-            const { data } = await axios.delete(
+            const { data } = await api.delete(
               `${backendUrl}/api/images/trash/${imageId}/permanent`,
               { withCredentials: true }
             );
@@ -256,7 +253,7 @@ const Trash = () => {
       const results = await Promise.all(
         selectedAlbums.map(async (albumId) => {
           try {
-            const { data } = await axios.delete(
+            const { data } = await api.delete(
               `${backendUrl}/api/albums/trash/${albumId}/permanent`,
               { withCredentials: true }
             );
@@ -297,7 +294,7 @@ const Trash = () => {
     if (!confirmDelete) return;
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/albums/trash/empty`,
         { withCredentials: true }
       );
@@ -323,7 +320,7 @@ const Trash = () => {
     if (!confirmDelete) return;
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/images/trash/empty`,
         { withCredentials: true }
       );
@@ -348,7 +345,7 @@ const Trash = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/images/trash/${id}/permanent`,
         { withCredentials: true }
       );
@@ -373,7 +370,7 @@ const Trash = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/albums/trash/${id}/permanent`,
         { withCredentials: true }
       );
@@ -392,7 +389,7 @@ const Trash = () => {
 
   const imageCleanup = async () => {
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/images/trash/cleanup`,
         { withCredentials: true }
       );
@@ -406,7 +403,7 @@ const Trash = () => {
 
   const albumCleanup = async () => {
     try {
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         `${backendUrl}/api/albums/trash/cleanup`,
         { withCredentials: true }
       );
@@ -440,12 +437,11 @@ const Trash = () => {
         ),
       };
 
-  console.log(filteredTrash.images);
 
   return (
     <>
       {loading && <Loading />}
-      <ImagePreview />
+      <ImagePreview images={trashImages}/>
 
       {/* Trashed Images */}
       <div className="favorite-main-layout">
@@ -535,6 +531,12 @@ const Trash = () => {
                           <Trash2 size={20} />
                         </div>
                       </>
+                    )}
+
+                    {selectedImages.includes(image.imageId) && (
+                      <div className="selection-checkmark active">
+                        <BadgeCheck size={26} />
+                      </div>
                     )}
 
                     <div className="photo-overlay">
@@ -677,7 +679,7 @@ const Trash = () => {
                     </div>
 
                     {selectedAlbums.includes(album.albumId) && (
-                      <div className="trash-selection-checkmark active">
+                      <div className="selection-checkmark active">
                         <BadgeCheck size={26} />
                       </div>
                     )}

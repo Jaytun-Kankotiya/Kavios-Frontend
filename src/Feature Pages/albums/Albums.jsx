@@ -7,8 +7,7 @@ import { useImageContext } from "../../context/ImageContext";
 import Loading from "../../components/Loading";
 import Sidebar from "../Sidebar/Sidebar";
 import AddNewAlbum from "./AddNewAlbum";
-import axios from "axios";
-import { toast } from "react-toastify";
+import api from "../../utils/axios";
 
 const Albums = () => {
   const navigate = useNavigate();
@@ -29,8 +28,6 @@ const Albums = () => {
   } = useImageContext();
   const [filter, setFilter] = useState("all");
   const [filteredAlbums, setFilteredAlbums] = useState([]);
-
-  console.log(albums)
 
   useEffect(() => {
     fetchAlbums();

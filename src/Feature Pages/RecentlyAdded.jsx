@@ -5,13 +5,11 @@ import Sidebar from "./Sidebar/Sidebar";
 import AddNewAlbum from "./albums/AddNewAlbum";
 import AddNewImage from "./photos/AddNewPhoto";
 import ImagePreview from "./photos/PhotoPreview";
-
 import { Plus, FolderOpen, Image, Calendar, Heart, Trash2 } from "lucide-react";
-
 import { useImageContext } from "../context/ImageContext";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 const RecentlyAdded = () => {
   const {
@@ -33,14 +31,13 @@ const RecentlyAdded = () => {
 
   const [recentImages, setRecentImages] = useState([]);
   const [recentAlbums, setRecentAlbums] = useState([]);
-  // const [previewImage, setPreviewImage] = useState(null);
 
   const navigate = useNavigate();
 
   const fetchRecentImages = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/images/recent`, {
+      const { data } = await api.get(`${backendUrl}/api/images/recent`, {
         withCredentials: true,
       });
       if (!data.success) toast.error(data.message);
@@ -55,7 +52,7 @@ const RecentlyAdded = () => {
   const fetchRecentAlbums = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/albums/recent`, {
+      const { data } = await api.get(`${backendUrl}/api/albums/recent`, {
         withCredentials: true,
       });
       if (!data.success) toast.error(data.message);
@@ -95,8 +92,6 @@ const RecentlyAdded = () => {
         ),
       };
 
-      console.log(filteredFavorites.albums)
-
   return (
     <>
       {loading && <Loading />}
@@ -114,7 +109,8 @@ const RecentlyAdded = () => {
               <div className="photos-title-section">
                 <h1>Recently Added Images</h1>
                 <p>
-                  {filteredFavorites.images.length} new memories captured this week
+                  {filteredFavorites.images.length} new memories captured this
+                  week
                 </p>
               </div>
               <div className="photos-header-actions">
@@ -197,7 +193,9 @@ const RecentlyAdded = () => {
             <div className="albums-header-content">
               <div className="photos-title-section">
                 <h1>Recently Added Albums</h1>
-                <p>{filteredFavorites.albums.length} new albums created this week</p>
+                <p>
+                  {filteredFavorites.albums.length} new albums created this week
+                </p>
               </div>
               <button
                 className="primary-button"

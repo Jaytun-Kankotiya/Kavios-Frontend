@@ -18,10 +18,8 @@ const Login = () => {
 
       if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
         setIsLoading(false);
-
         localStorage.setItem("user", JSON.stringify(event.data.user));
-
-        // toast.success("Login successful!");
+        toast.success("Login successful!");
         navigate("/photos");
       } else if (event.data.type === "GOOGLE_AUTH_ERROR") {
         setIsLoading(false);
