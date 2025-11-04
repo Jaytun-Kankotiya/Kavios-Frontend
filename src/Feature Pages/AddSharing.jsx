@@ -9,6 +9,7 @@ import api from "../utils/axios";
 const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
   const { loading, setLoading, setAddNewSharing, backendUrl } = useImageContext();
   const [email, setEmail] = useState("");
+  const [adding, setAdding] = useState(false);
   const [sharedUsers, setSharedUsers] = useState(currentSharedUsers);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
     }
 
     setLoading(true);
+    setAdding(true)
     try {
       const { data } = await api.post(
         `${backendUrl}/api/albums/${albumId}/share`,
@@ -50,6 +52,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
       setLoading(false);
+      setAdding(false)
     }
   };
 
@@ -109,7 +112,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
             type="submit" 
             disabled={loading}
           >
-            {loading ? "Adding..." : (
+            {adding ? "Adding..." : (
               <>
                 <UserPlus size={18} />
                 Add User
