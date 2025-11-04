@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import { X, UserPlus, Mail, Trash2, Users } from "lucide-react";
 import { useImageContext } from "../context/ImageContext";
 import { toast } from "react-toastify";
-import axios from "axios";
 import './Sidebar/Sidebar.css';
 import './FeaturePages.css'
-import { useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
-  const { loading, setLoading, addNewSharing, setAddNewSharing, backendUrl } = useImageContext();
+  const { loading, setLoading, setAddNewSharing, backendUrl } = useImageContext();
   const [email, setEmail] = useState("");
   const [sharedUsers, setSharedUsers] = useState(currentSharedUsers);
 

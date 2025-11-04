@@ -12,13 +12,10 @@ import ImagePreview from "./PhotoPreview";
 const Photos = () => {
   const {
     loading,
-    setLoading,
-    backendUrl,
     images,
     fetchImages,
     newImage,
     setNewImage,
-    imagePreview,
     setImagePreview,
     imageToggleFavorite,
     imageDeleteHandler,

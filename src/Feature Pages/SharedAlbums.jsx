@@ -12,7 +12,6 @@ import api from "../utils/axios";
 const SharedAlbums = () => {
   const {
     addNewSharing,
-    setAddNewSharing,
     loading,
     setLoading,
     backendUrl,
