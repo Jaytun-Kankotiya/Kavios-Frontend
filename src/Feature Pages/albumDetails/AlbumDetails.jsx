@@ -258,6 +258,7 @@ const AlbumDetails = () => {
         <AddSharing
           albumId={currentAlbum.albumId}
           currentSharedUsers={currentAlbum.sharedUsers || []}
+          onSharingUpdate={fetchAlbumById}
         />
       ) : null}
 

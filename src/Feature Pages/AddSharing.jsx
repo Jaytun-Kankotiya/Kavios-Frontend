@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { X, UserPlus, Mail, Trash2, Users } from "lucide-react";
 import { useImageContext } from "../context/ImageContext";
 import { toast } from "react-toastify";
-import './Sidebar/Sidebar.css';
-import './FeaturePages.css'
+import "./Sidebar/Sidebar.css";
+import "./FeaturePages.css";
 import api from "../utils/axios";
 
-const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
-  const { loading, setLoading, setAddNewSharing, backendUrl } = useImageContext();
+const AddSharing = ({ albumId, currentSharedUsers = [], onSharingUpdate }) => {
+  const { loading, setLoading, setAddNewSharing, backendUrl } =
+    useImageContext();
   const [email, setEmail] = useState("");
   const [adding, setAdding] = useState(false);
   const [sharedUsers, setSharedUsers] = useState(currentSharedUsers);
@@ -18,7 +19,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
 
   const handleAddUser = async (e) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
       toast.error("Please enter an email address");
       return;
@@ -31,7 +32,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
     }
 
     setLoading(true);
-    setAdding(true)
+    setAdding(true);
     try {
       const { data } = await api.post(
         `${backendUrl}/api/albums/${albumId}/share`,
@@ -46,13 +47,14 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
 
       toast.success(data.message);
       setSharedUsers(data.data.sharedUsers);
-      setAddNewSharing(false)
+      if (onSharingUpdate) onSharingUpdate();
+      setAddNewSharing(false);
       setEmail("");
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
       setLoading(false);
-      setAdding(false)
+      setAdding(false);
     }
   };
 
@@ -72,6 +74,7 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
 
       toast.success(data.message);
       setSharedUsers(data.data.sharedUsers);
+      if (onSharingUpdate) onSharingUpdate();
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
@@ -107,12 +110,13 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
             </div>
           </div>
 
-          <button 
-            className="addAlbum-button share-add-button" 
-            type="submit" 
-            disabled={loading}
-          >
-            {adding ? "Adding..." : (
+          <button
+            className="addAlbum-button share-add-button"
+            type="submit"
+            disabled={loading}>
+            {adding ? (
+              "Adding..."
+            ) : (
               <>
                 <UserPlus size={18} />
                 Add User
@@ -135,17 +139,14 @@ const AddSharing = ({ albumId, currentSharedUsers = [] }) => {
                     <div className="shared-user-avatar">
                       {user.email.charAt(0).toUpperCase()}
                     </div>
-                    <span className="shared-user-email">
-                      {user.email}
-                    </span>
+                    <span className="shared-user-email">{user.email}</span>
                   </div>
 
                   <button
                     onClick={() => handleRemoveUser(user.email)}
                     disabled={loading}
                     className="shared-user-remove-btn"
-                    title="Remove access"
-                  >
+                    title="Remove access">
                     <Trash2 size={18} />
                   </button>
                 </div>
